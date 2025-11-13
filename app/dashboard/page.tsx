@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
+import { useUser } from '@clerk/nextjs'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import {
@@ -15,10 +16,9 @@ import {
   Users,
   CheckCircle2
 } from 'lucide-react'
-import { supabase } from '@/lib/supabase'
 
 export default function DashboardPage() {
-  const [user, setUser] = useState<any>(null)
+  const { user } = useUser()
   const [stats, setStats] = useState({
     totalBookings: 0,
     upcomingBookings: 0,
@@ -26,42 +26,29 @@ export default function DashboardPage() {
     eventTypes: 0
   })
 
-  useEffect(() => {
-    loadUserData()
-  }, [])
-
-  const loadUserData = async () => {
-    const { data: { user } } = await supabase.auth.getUser()
-    setUser(user)
-  }
-
   const statCards = [
     {
       title: 'Total Bookings',
       value: stats.totalBookings,
       icon: Calendar,
-      color: 'from-blue-500 to-cyan-500',
       change: '+12%'
     },
     {
       title: 'Upcoming',
       value: stats.upcomingBookings,
       icon: Clock,
-      color: 'from-purple-500 to-pink-500',
       change: '+8%'
     },
     {
       title: 'Revenue',
       value: `$${stats.revenue}`,
       icon: DollarSign,
-      color: 'from-green-500 to-emerald-500',
       change: '+23%'
     },
     {
       title: 'Event Types',
       value: stats.eventTypes,
       icon: Users,
-      color: 'from-orange-500 to-red-500',
       change: '+2'
     }
   ]
@@ -72,21 +59,18 @@ export default function DashboardPage() {
       description: 'Set up a new booking type',
       icon: Plus,
       href: '/dashboard/events/new',
-      color: 'from-purple-600 to-blue-600'
     },
     {
       title: 'View Bookings',
       description: 'See all your scheduled meetings',
       icon: Calendar,
       href: '/dashboard/bookings',
-      color: 'from-blue-600 to-cyan-600'
     },
     {
       title: 'Connect Calendar',
       description: 'Sync with Google Calendar',
       icon: Calendar,
       href: '/dashboard/settings/calendars',
-      color: 'from-green-600 to-emerald-600'
     }
   ]
 
@@ -120,10 +104,10 @@ export default function DashboardPage() {
         transition={{ duration: 0.5 }}
         className="mb-8"
       >
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">
-          Welcome back, {user?.user_metadata?.full_name || 'there'}!
+        <h1 className="text-3xl font-bold text-white mb-2">
+          Welcome back, {user?.firstName || user?.username || 'there'}!
         </h1>
-        <p className="text-gray-600">
+        <p className="text-gray-400">
           Here's what's happening with your bookings today.
         </p>
       </motion.div>
@@ -137,19 +121,19 @@ export default function DashboardPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: index * 0.1 }}
           >
-            <Card className="p-6 hover:shadow-lg transition-shadow">
+            <Card className="p-6 bg-white/5 border-white/10 backdrop-blur-sm hover:bg-white/10 transition-all">
               <div className="flex items-center justify-between mb-4">
-                <div className={`w-12 h-12 rounded-xl bg-gradient-to-r ${stat.color} flex items-center justify-center`}>
+                <div className="w-12 h-12 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center">
                   <stat.icon className="w-6 h-6 text-white" />
                 </div>
-                <span className="text-sm font-semibold text-green-600">
+                <span className="text-sm font-semibold text-white">
                   {stat.change}
                 </span>
               </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-1">
+              <h3 className="text-2xl font-bold text-white mb-1">
                 {stat.value}
               </h3>
-              <p className="text-sm text-gray-600">{stat.title}</p>
+              <p className="text-sm text-gray-400">{stat.title}</p>
             </Card>
           </motion.div>
         ))}
@@ -162,21 +146,21 @@ export default function DashboardPage() {
         transition={{ duration: 0.5, delay: 0.3 }}
         className="mb-8"
       >
-        <h2 className="text-xl font-bold text-gray-900 mb-4">Quick Actions</h2>
+        <h2 className="text-xl font-bold text-white mb-4">Quick Actions</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {quickActions.map((action, index) => (
             <Link key={index} href={action.href}>
-              <Card className="p-6 hover:shadow-lg transition-all hover:-translate-y-1 cursor-pointer group">
-                <div className={`w-12 h-12 rounded-xl bg-gradient-to-r ${action.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
+              <Card className="p-6 bg-white/5 border-white/10 backdrop-blur-sm hover:bg-white/10 transition-all hover:-translate-y-1 cursor-pointer group">
+                <div className="w-12 h-12 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                   <action.icon className="w-6 h-6 text-white" />
                 </div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                <h3 className="text-lg font-semibold text-white mb-2">
                   {action.title}
                 </h3>
-                <p className="text-sm text-gray-600 mb-4">
+                <p className="text-sm text-gray-400 mb-4">
                   {action.description}
                 </p>
-                <div className="flex items-center text-purple-600 font-medium text-sm">
+                <div className="flex items-center text-white font-medium text-sm">
                   Get started
                   <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
                 </div>
@@ -193,33 +177,35 @@ export default function DashboardPage() {
         transition={{ duration: 0.5, delay: 0.4 }}
       >
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-bold text-gray-900">Recent Bookings</h2>
+          <h2 className="text-xl font-bold text-white">Recent Bookings</h2>
           <Link href="/dashboard/bookings">
-            <Button variant="outline">View All</Button>
+            <Button variant="outline" className="border-white/20 text-white hover:bg-white/10">
+              View All
+            </Button>
           </Link>
         </div>
-        <Card className="divide-y divide-gray-200">
+        <Card className="bg-white/5 border-white/10 backdrop-blur-sm divide-y divide-white/10">
           {recentBookings.length > 0 ? (
             recentBookings.map((booking) => (
-              <div key={booking.id} className="p-6 hover:bg-gray-50 transition-colors">
+              <div key={booking.id} className="p-6 hover:bg-white/5 transition-colors">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 rounded-lg bg-purple-100 flex items-center justify-center">
-                      <Calendar className="w-5 h-5 text-purple-600" />
+                    <div className="w-10 h-10 rounded-lg bg-white/10 border border-white/20 flex items-center justify-center">
+                      <Calendar className="w-5 h-5 text-white" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-gray-900">{booking.title}</h3>
-                      <p className="text-sm text-gray-600">{booking.time}</p>
+                      <h3 className="font-semibold text-white">{booking.title}</h3>
+                      <p className="text-sm text-gray-400">{booking.time}</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
                     {booking.status === 'confirmed' ? (
-                      <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                      <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-white/10 text-white border border-white/20">
                         <CheckCircle2 className="w-3 h-3 mr-1" />
                         Confirmed
                       </span>
                     ) : (
-                      <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                      <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-white/5 text-gray-400 border border-white/20">
                         <Clock className="w-3 h-3 mr-1" />
                         Pending
                       </span>
@@ -231,14 +217,14 @@ export default function DashboardPage() {
           ) : (
             <div className="p-12 text-center">
               <Calendar className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+              <h3 className="text-lg font-semibold text-white mb-2">
                 No bookings yet
               </h3>
-              <p className="text-gray-600 mb-6">
+              <p className="text-gray-400 mb-6">
                 Create your first event type to start accepting bookings
               </p>
               <Link href="/dashboard/events/new">
-                <Button>
+                <Button className="bg-white text-black hover:bg-gray-200">
                   <Plus className="w-4 h-4 mr-2" />
                   Create Event Type
                 </Button>

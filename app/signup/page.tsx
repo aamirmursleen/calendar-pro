@@ -46,10 +46,18 @@ export default function SignupPage() {
           data: {
             full_name: formData.fullName,
           },
+          emailRedirectTo: `${window.location.origin}/auth/callback`,
         },
       })
 
       if (signUpError) throw signUpError
+
+      // Check if email confirmation is required
+      if (data?.user && !data.user.confirmed_at) {
+        setError('Please check your email to confirm your account. If you don\'t receive an email, contact support.')
+        setLoading(false)
+        return
+      }
 
       setSuccess(true)
       setTimeout(() => {
