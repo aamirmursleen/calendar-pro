@@ -107,7 +107,7 @@ export const AnimatedBeam: React.FC<AnimatedBeamProps> = ({
         strokeOpacity="1"
         strokeLinecap="round"
       >
-        <motion.animate
+        <animate
           attributeName="d"
           dur={`${duration}s`}
           repeatCount="indefinite"
