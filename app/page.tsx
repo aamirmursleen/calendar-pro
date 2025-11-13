@@ -12,7 +12,7 @@ import {
   TrendingDown, PhoneCall, CreditCard, Headphones
 } from 'lucide-react'
 import { SignInButton } from '@clerk/nextjs'
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 
 export default function Home() {
   const containerRef = useRef(null)
@@ -20,12 +20,85 @@ export default function Home() {
   const y = useTransform(scrollYProgress, [0, 1], ['0%', '50%'])
   const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0])
 
+  // Interactive Calendar State
+  const [selectedDate, setSelectedDate] = useState<number | null>(15)
+  const [selectedTime, setSelectedTime] = useState<string | null>(null)
+  const [currentMonth, setCurrentMonth] = useState('November 2025')
+  const [showConfirmation, setShowConfirmation] = useState(false)
+  const [selectedTheme, setSelectedTheme] = useState('futuristic')
+
+  // Theme Configurations
+  const themes = {
+    classic: {
+      name: 'Classic B&W',
+      bg: 'bg-white',
+      primary: 'from-black to-gray-800',
+      text: 'text-gray-900',
+      border: 'border-gray-300',
+      hover: 'hover:bg-gray-100',
+      selected: 'bg-black text-white',
+      icon: '🎯'
+    },
+    gradient: {
+      name: 'Purple Dream',
+      bg: 'bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50',
+      primary: 'from-indigo-600 via-purple-600 to-pink-600',
+      text: 'text-gray-900',
+      border: 'border-purple-200',
+      hover: 'hover:bg-purple-50',
+      selected: 'bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 text-white',
+      icon: '💜'
+    },
+    ocean: {
+      name: 'Ocean Blue',
+      bg: 'bg-gradient-to-br from-cyan-50 via-blue-50 to-indigo-50',
+      primary: 'from-cyan-600 via-blue-600 to-indigo-600',
+      text: 'text-gray-900',
+      border: 'border-blue-200',
+      hover: 'hover:bg-blue-50',
+      selected: 'bg-gradient-to-br from-cyan-600 via-blue-600 to-indigo-600 text-white',
+      icon: '🌊'
+    },
+    sunset: {
+      name: 'Sunset Glow',
+      bg: 'bg-gradient-to-br from-orange-50 via-pink-50 to-rose-50',
+      primary: 'from-orange-600 via-pink-600 to-rose-600',
+      text: 'text-gray-900',
+      border: 'border-pink-200',
+      hover: 'hover:bg-pink-50',
+      selected: 'bg-gradient-to-br from-orange-600 via-pink-600 to-rose-600 text-white',
+      icon: '🌅'
+    },
+    forest: {
+      name: 'Forest Green',
+      bg: 'bg-gradient-to-br from-emerald-50 via-green-50 to-teal-50',
+      primary: 'from-emerald-600 via-green-600 to-teal-600',
+      text: 'text-gray-900',
+      border: 'border-green-200',
+      hover: 'hover:bg-green-50',
+      selected: 'bg-gradient-to-br from-emerald-600 via-green-600 to-teal-600 text-white',
+      icon: '🌲'
+    },
+    futuristic: {
+      name: 'Space Dark',
+      bg: 'bg-gradient-to-br from-slate-950 via-blue-950/20 to-slate-950',
+      primary: 'from-slate-900 to-slate-800',
+      text: 'text-white',
+      border: 'border-cyan-500/30',
+      hover: 'hover:bg-white/10',
+      selected: 'bg-gradient-to-r from-cyan-400 to-cyan-600 text-white',
+      icon: '🌌'
+    }
+  }
+
+  const currentTheme = themes[selectedTheme as keyof typeof themes]
+
   return (
     <div className="min-h-screen bg-black text-white overflow-hidden" ref={containerRef}>
       <Header />
 
-      {/* HERO SECTION - Attention Grabbing */}
-      <section className="relative min-h-screen flex items-center justify-center pt-16">
+      {/* HERO SECTION - Split Layout */}
+      <section className="relative min-h-screen pt-32 pb-20">
         {/* Animated Grid Background */}
         <motion.div
           style={{ y }}
@@ -61,106 +134,756 @@ export default function Home() {
           }}
         />
 
-        <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-32 text-center">
-          {/* Badge */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="inline-flex items-center gap-2 px-4 py-2 mb-8 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm"
-          >
-            <Sparkles className="w-4 h-4" />
-            <span className="text-sm">Join 200,000+ professionals who ditched Calendly</span>
-          </motion.div>
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
 
-          {/* Main Hook - Problem/Desire */}
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="text-6xl sm:text-7xl lg:text-8xl font-bold tracking-tight mb-8"
-          >
-            <span className="block">Stop Wasting</span>
-            <span className="block bg-gradient-to-r from-white via-gray-400 to-white bg-clip-text text-transparent animate-gradient">
-              10 Hours Every Week
-            </span>
-            <span className="block mt-4 text-5xl sm:text-6xl lg:text-7xl">On Scheduling</span>
-          </motion.h1>
-
-          {/* Subheading - Promise & Benefit */}
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="text-xl sm:text-2xl text-gray-400 max-w-3xl mx-auto mb-12 leading-relaxed"
-          >
-            CalendarPro eliminates the endless email ping-pong.<br/>
-            <span className="text-white font-semibold"> Get back 520 hours per year</span> to focus on what actually makes you money.
-          </motion.p>
-
-          {/* CTA Buttons */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12"
-          >
-            <SignInButton mode="modal">
-              <Button size="lg" className="bg-white text-black hover:bg-gray-200 px-8 group text-lg">
-                Start Free - Takes 60 Seconds
-                <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
-              </Button>
-            </SignInButton>
-            <Link href="#how-it-works">
-              <Button size="lg" variant="outline" className="border-white/20 hover:bg-white/10 px-8 text-lg">
-                See How It Works
-              </Button>
-            </Link>
-          </motion.div>
-
-          {/* Trust Indicators */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
-            className="flex flex-wrap items-center justify-center gap-6 text-sm text-gray-400"
-          >
-            <div className="flex items-center gap-2">
-              <Check className="w-4 h-4 text-green-500" />
-              <span>No credit card required</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Check className="w-4 h-4 text-green-500" />
-              <span>Setup in 60 seconds</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Check className="w-4 h-4 text-green-500" />
-              <span>Cancel anytime</span>
-            </div>
-          </motion.div>
-
-          {/* Stats - Social Proof */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.5 }}
-            className="mt-24 grid grid-cols-3 gap-8 max-w-3xl mx-auto"
-          >
-            {[
-              { value: '200K+', label: 'Active Users' },
-              { value: '3.7M+', label: 'Bookings Made' },
-              { value: '$9M+', label: 'Revenue Processed' },
-            ].map((stat, index) => (
+            {/* LEFT SIDE - Content */}
+            <div className="text-left">
+              {/* Badge */}
               <motion.div
-                key={index}
-                className="border border-white/10 rounded-lg p-6 bg-white/5 backdrop-blur-sm hover:bg-white/10 transition-all"
-                whileHover={{ scale: 1.05 }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                className="inline-flex items-center gap-2 px-4 py-2 mb-8 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm"
               >
-                <div className="text-3xl font-bold mb-1">{stat.value}</div>
-                <div className="text-sm text-gray-400">{stat.label}</div>
+                <Sparkles className="w-4 h-4" />
+                <span className="text-sm">Join 200,000+ professionals who ditched Calendly</span>
               </motion.div>
-            ))}
-          </motion.div>
+
+              {/* Main Hook - Problem/Desire */}
+              <motion.h1
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.1 }}
+                className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight mb-8"
+              >
+                <span className="block">Stop Wasting</span>
+                <span className="block bg-gradient-to-r from-white via-gray-400 to-white bg-clip-text text-transparent animate-gradient">
+                  10 Hours Every Week
+                </span>
+                <span className="block mt-4 text-4xl sm:text-5xl lg:text-6xl">On Scheduling</span>
+              </motion.h1>
+
+              {/* Subheading - Promise & Benefit */}
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="text-lg sm:text-xl text-gray-400 mb-12 leading-relaxed"
+              >
+                CalendarPro eliminates the endless email ping-pong.<br/>
+                <span className="text-white font-semibold"> Get back 520 hours per year</span> to focus on what actually makes you money.
+              </motion.p>
+
+              {/* CTA Buttons */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.3 }}
+                className="flex flex-col sm:flex-row items-start gap-4 mb-12"
+              >
+                <SignInButton mode="modal">
+                  <Button size="lg" className="bg-white text-black hover:bg-gray-200 px-8 group text-lg">
+                    Start Free - Takes 60 Seconds
+                    <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+                  </Button>
+                </SignInButton>
+                <Link href="#how-it-works">
+                  <Button size="lg" variant="outline" className="border-white/20 hover:bg-white/10 px-8 text-lg">
+                    See How It Works
+                  </Button>
+                </Link>
+              </motion.div>
+
+              {/* Trust Indicators */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.5, delay: 0.4 }}
+                className="flex flex-wrap items-center gap-6 text-sm text-gray-400"
+              >
+                <div className="flex items-center gap-2">
+                  <Check className="w-4 h-4 text-green-500" />
+                  <span>No credit card required</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Check className="w-4 h-4 text-green-500" />
+                  <span>Setup in 60 seconds</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Check className="w-4 h-4 text-green-500" />
+                  <span>Cancel anytime</span>
+                </div>
+              </motion.div>
+            </div>
+
+            {/* RIGHT SIDE - Interactive Demo */}
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="relative"
+            >
+              {/* Floating Sparkles */}
+              {[...Array(8)].map((_, i) => (
+                <motion.div
+                  key={`sparkle-${i}`}
+                  className="absolute w-3 h-3 pointer-events-none"
+                  style={{
+                    top: `${Math.random() * 100}%`,
+                    left: `${Math.random() * 100}%`,
+                  }}
+                  animate={{
+                    y: [0, -50, 0],
+                    x: [0, Math.random() * 30 - 15, 0],
+                    opacity: [0, 1, 0],
+                    scale: [0, 1.5, 0],
+                    rotate: [0, 360],
+                  }}
+                  transition={{
+                    duration: Math.random() * 4 + 3,
+                    repeat: Infinity,
+                    delay: Math.random() * 2,
+                    ease: "easeInOut"
+                  }}
+                >
+                  <div className="w-full h-full bg-gradient-to-br from-cyan-400 to-purple-400 rounded-full blur-sm" />
+                </motion.div>
+              ))}
+
+              <div className="mb-8">
+                <h3 className="text-2xl font-bold text-center mb-4">Experience the Magic</h3>
+                <div className="flex items-center justify-center gap-2 mb-6 flex-wrap">
+                  <span className="text-xs text-gray-400">Choose theme:</span>
+
+                  {/* Theme Buttons - Button Size */}
+                  {Object.entries(themes).map(([key, theme]) => (
+                    <motion.button
+                      key={key}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={() => {
+                        setSelectedTheme(key)
+                        setShowConfirmation(false)
+                        setSelectedTime(null)
+                      }}
+                      className={`relative inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border transition-all text-xs font-semibold ${
+                        selectedTheme === key
+                          ? 'border-white bg-white/10 text-white shadow-lg'
+                          : 'border-white/20 bg-white/5 text-gray-400 hover:bg-white/10 hover:text-white'
+                      }`}
+                    >
+                      <span className="text-sm">{theme.icon}</span>
+                      <span>{theme.name}</span>
+                      {selectedTheme === key && (
+                        <motion.div
+                          layoutId="selected"
+                          className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-green-500 rounded-full flex items-center justify-center"
+                          initial={{ scale: 0 }}
+                          animate={{ scale: 1 }}
+                        >
+                          <Check className="w-2 h-2 text-white" />
+                        </motion.div>
+                      )}
+                    </motion.button>
+                  ))}
+
+                  {/* Create Your Own Button */}
+                  <SignInButton mode="modal">
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="relative inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border-2 border-dashed border-purple-400 bg-gradient-to-r from-purple-500/10 to-pink-500/10 hover:from-purple-500/20 hover:to-pink-500/20 transition-all text-xs font-bold text-white"
+                    >
+                      <motion.span
+                        animate={{ rotate: 360 }}
+                        transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+                        className="text-sm"
+                      >
+                        ✨
+                      </motion.span>
+                      <span>Create Own</span>
+                      <span className="absolute -top-1.5 -right-1.5 bg-gradient-to-r from-green-400 to-emerald-500 text-white text-[9px] px-1.5 py-0.5 rounded-full font-bold shadow-lg">
+                        NEW
+                      </span>
+                    </motion.button>
+                  </SignInButton>
+                </div>
+              </div>
+
+              {/* Interactive Calendar - FUTURISTIC SPACE THEME */}
+              <motion.div
+                className="relative rounded-3xl overflow-hidden border-2 border-cyan-400/30"
+                animate={{
+                  boxShadow: [
+                    '0 0 30px rgba(34, 211, 238, 0.3), 0 0 60px rgba(34, 211, 238, 0.2), 0 0 90px rgba(34, 211, 238, 0.1)',
+                    '0 0 50px rgba(34, 211, 238, 0.5), 0 0 100px rgba(34, 211, 238, 0.3), 0 0 150px rgba(34, 211, 238, 0.2)',
+                    '0 0 30px rgba(34, 211, 238, 0.3), 0 0 60px rgba(34, 211, 238, 0.2), 0 0 90px rgba(34, 211, 238, 0.1)',
+                  ],
+                }}
+                transition={{
+                  duration: 3,
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }}
+              >
+                {/* Animated Space Background */}
+                <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-blue-950/20 to-slate-950">
+                  {/* Twinkling Stars - Larger and More Visible */}
+                  {[...Array(100)].map((_, i) => {
+                    const size = Math.random() > 0.7 ? 2 : 1;
+                    return (
+                      <motion.div
+                        key={i}
+                        className="absolute bg-white rounded-full"
+                        style={{
+                          width: `${size}px`,
+                          height: `${size}px`,
+                          top: `${Math.random() * 100}%`,
+                          left: `${Math.random() * 100}%`,
+                          boxShadow: size === 2 ? '0 0 8px rgba(255, 255, 255, 0.8)' : '0 0 4px rgba(255, 255, 255, 0.6)',
+                        }}
+                        animate={{
+                          opacity: [0.3, 1, 0.3],
+                          scale: [0.8, 1.5, 0.8],
+                        }}
+                        transition={{
+                          duration: Math.random() * 2 + 1.5,
+                          repeat: Infinity,
+                          delay: Math.random() * 2,
+                          ease: "easeInOut"
+                        }}
+                      />
+                    );
+                  })}
+
+                  {/* Neon Floating Particles - Larger and Brighter */}
+                  {[...Array(30)].map((_, i) => (
+                    <motion.div
+                      key={`particle-${i}`}
+                      className="absolute w-3 h-3 rounded-full"
+                      style={{
+                        top: `${Math.random() * 100}%`,
+                        left: `${Math.random() * 100}%`,
+                        background: 'radial-gradient(circle, rgba(34, 211, 238, 0.8), rgba(34, 211, 238, 0.2))',
+                        boxShadow: '0 0 15px rgba(34, 211, 238, 0.8), 0 0 30px rgba(34, 211, 238, 0.4)',
+                      }}
+                      animate={{
+                        y: [0, -40, 0],
+                        x: [0, Math.random() * 30 - 15, 0],
+                        opacity: [0.4, 0.9, 0.4],
+                        scale: [0.8, 1.3, 0.8],
+                      }}
+                      transition={{
+                        duration: Math.random() * 4 + 4,
+                        repeat: Infinity,
+                        delay: Math.random() * 2,
+                        ease: "easeInOut"
+                      }}
+                    />
+                  ))}
+
+                  {/* Neon Grid Lines */}
+                  <div className="absolute inset-0 opacity-20">
+                    <div className="absolute w-full h-px bg-gradient-to-r from-transparent via-cyan-400 to-transparent top-1/4" />
+                    <div className="absolute w-full h-px bg-gradient-to-r from-transparent via-cyan-400 to-transparent top-2/4" />
+                    <div className="absolute w-full h-px bg-gradient-to-r from-transparent via-cyan-400 to-transparent top-3/4" />
+                  </div>
+                </div>
+
+                {/* Header - Dark Glassmorphic with Neon Effects */}
+                <div className="relative p-6 bg-gradient-to-r from-slate-900 to-slate-800 backdrop-blur-xl border-b-2 border-cyan-400/30">
+                  {/* Animated Neon Border Top */}
+                  <motion.div
+                    className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-cyan-400 to-transparent"
+                    animate={{
+                      opacity: [0.5, 1, 0.5],
+                    }}
+                    transition={{
+                      duration: 2,
+                      repeat: Infinity,
+                      ease: "easeInOut"
+                    }}
+                  />
+
+                  <div className="flex items-center gap-4 mb-4">
+                    <motion.div
+                      className="relative w-14 h-14 rounded-full bg-gradient-to-br from-cyan-400 to-cyan-600 flex items-center justify-center text-2xl"
+                      animate={{
+                        boxShadow: [
+                          '0 0 30px rgba(34, 211, 238, 0.8), 0 0 60px rgba(34, 211, 238, 0.5)',
+                          '0 0 50px rgba(34, 211, 238, 1), 0 0 100px rgba(34, 211, 238, 0.7)',
+                          '0 0 30px rgba(34, 211, 238, 0.8), 0 0 60px rgba(34, 211, 238, 0.5)',
+                        ],
+                      }}
+                      transition={{
+                        duration: 2,
+                        repeat: Infinity,
+                        ease: "easeInOut"
+                      }}
+                    >
+                      <div className="absolute inset-0 rounded-full border-2 border-cyan-300/70" />
+                      <motion.div
+                        className="absolute inset-0 rounded-full border-2 border-cyan-200"
+                        animate={{
+                          scale: [1, 1.3, 1],
+                          opacity: [0.8, 0, 0.8],
+                        }}
+                        transition={{
+                          duration: 2,
+                          repeat: Infinity,
+                          ease: "easeOut"
+                        }}
+                      />
+                      <motion.div
+                        className="absolute inset-0 rounded-full border-2 border-cyan-100"
+                        animate={{
+                          scale: [1, 1.5, 1],
+                          opacity: [0.6, 0, 0.6],
+                        }}
+                        transition={{
+                          duration: 2,
+                          repeat: Infinity,
+                          ease: "easeOut",
+                          delay: 0.3
+                        }}
+                      />
+                      {currentTheme.icon}
+                    </motion.div>
+                    <div>
+                      <motion.h3
+                        className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-cyan-200 bg-clip-text text-transparent"
+                        style={{
+                          textShadow: '0 0 20px rgba(34, 211, 238, 0.5)',
+                        }}
+                      >
+                        30-Minute Demo Call
+                      </motion.h3>
+                      <p className="text-cyan-300/90 text-sm font-medium" style={{ textShadow: '0 0 10px rgba(34, 211, 238, 0.3)' }}>with Sarah Chen</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-4 text-cyan-200/90 text-sm">
+                    <motion.div
+                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/5 backdrop-blur-sm border-2 border-cyan-500/40"
+                      whileHover={{
+                        scale: 1.05,
+                        boxShadow: '0 0 25px rgba(34, 211, 238, 0.6), 0 0 50px rgba(34, 211, 238, 0.3)',
+                        borderColor: 'rgba(34, 211, 238, 0.8)'
+                      }}
+                    >
+                      <Clock className="w-4 h-4 text-cyan-400" style={{ filter: 'drop-shadow(0 0 4px rgba(34, 211, 238, 0.8))' }} />
+                      <span className="font-medium">30 min</span>
+                    </motion.div>
+                    <motion.div
+                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/5 backdrop-blur-sm border-2 border-cyan-500/40"
+                      whileHover={{
+                        scale: 1.05,
+                        boxShadow: '0 0 25px rgba(34, 211, 238, 0.6), 0 0 50px rgba(34, 211, 238, 0.3)',
+                        borderColor: 'rgba(34, 211, 238, 0.8)'
+                      }}
+                    >
+                      <Calendar className="w-4 h-4 text-cyan-400" style={{ filter: 'drop-shadow(0 0 4px rgba(34, 211, 238, 0.8))' }} />
+                      <span className="font-medium">Video Call</span>
+                    </motion.div>
+                  </div>
+                </div>
+
+                {!showConfirmation ? (
+                  <div className="relative grid md:grid-cols-2 gap-6 p-6">
+                    {/* Calendar Grid */}
+                    <div className="relative p-6 rounded-2xl bg-white backdrop-blur-xl border border-white/20">
+                      <div className="flex items-center justify-between mb-4">
+                        <h4 className="text-sm font-bold text-gray-900">{currentMonth}</h4>
+                        <div className="flex gap-2">
+                          <motion.button
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.95 }}
+                            className="p-2 rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors"
+                          >
+                            <span className="text-gray-900 text-sm font-bold">←</span>
+                          </motion.button>
+                          <motion.button
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.95 }}
+                            className="p-2 rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors"
+                          >
+                            <span className="text-gray-900 text-sm font-bold">→</span>
+                          </motion.button>
+                        </div>
+                      </div>
+
+                      {/* Days of Week */}
+                      <div className="grid grid-cols-7 gap-2 mb-3">
+                        {['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].map((day) => (
+                          <div key={day} className="text-center text-xs font-bold text-gray-600 py-1">
+                            {day}
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* Calendar Dates with Enhanced Neon Glow */}
+                      <div className="grid grid-cols-7 gap-2">
+                        {[...Array(35)].map((_, i) => {
+                          const date = i - 2
+                          const isValidDate = date > 0 && date <= 30
+                          const isSelected = date === selectedDate
+                          const isPast = date < 13
+
+                          return (
+                            <motion.button
+                              key={i}
+                              onClick={() => isValidDate && !isPast && setSelectedDate(date)}
+                              disabled={!isValidDate || isPast}
+                              whileHover={isValidDate && !isPast ? {
+                                scale: 1.15,
+                                boxShadow: '0 0 30px rgba(34, 211, 238, 0.6), 0 0 50px rgba(34, 211, 238, 0.4)'
+                              } : {}}
+                              whileTap={isValidDate && !isPast ? { scale: 0.95 } : {}}
+                              className={`aspect-square rounded-xl text-sm font-bold transition-all relative ${
+                                !isValidDate
+                                  ? 'invisible'
+                                  : isPast
+                                  ? 'text-gray-300 cursor-not-allowed'
+                                  : isSelected
+                                  ? 'bg-gradient-to-br from-black to-gray-900 text-white border-2 border-cyan-400'
+                                  : 'text-gray-900 bg-white border-2 border-gray-200 hover:border-cyan-400'
+                              }`}
+                              style={isSelected ? {
+                                boxShadow: '0 0 30px rgba(34, 211, 238, 0.9), 0 0 60px rgba(34, 211, 238, 0.6), 0 0 90px rgba(34, 211, 238, 0.4), 0 0 120px rgba(34, 211, 238, 0.2)',
+                              } : {}}
+                            >
+                              {isSelected && (
+                                <>
+                                  {/* Multiple Expanding Neon Rings */}
+                                  <motion.div
+                                    className="absolute inset-0 rounded-xl border-3 border-cyan-400"
+                                    style={{
+                                      boxShadow: '0 0 15px rgba(34, 211, 238, 0.8)',
+                                    }}
+                                    animate={{
+                                      scale: [1, 1.4, 1],
+                                      opacity: [1, 0, 1],
+                                    }}
+                                    transition={{
+                                      duration: 1.5,
+                                      repeat: Infinity,
+                                      ease: "easeOut"
+                                    }}
+                                  />
+                                  <motion.div
+                                    className="absolute inset-0 rounded-xl border-3 border-cyan-300"
+                                    style={{
+                                      boxShadow: '0 0 20px rgba(34, 211, 238, 0.6)',
+                                    }}
+                                    animate={{
+                                      scale: [1, 1.6, 1],
+                                      opacity: [0.8, 0, 0.8],
+                                    }}
+                                    transition={{
+                                      duration: 1.5,
+                                      repeat: Infinity,
+                                      ease: "easeOut",
+                                      delay: 0.2
+                                    }}
+                                  />
+                                  <motion.div
+                                    className="absolute inset-0 rounded-xl border-2 border-cyan-200"
+                                    style={{
+                                      boxShadow: '0 0 25px rgba(34, 211, 238, 0.4)',
+                                    }}
+                                    animate={{
+                                      scale: [1, 1.8, 1],
+                                      opacity: [0.6, 0, 0.6],
+                                    }}
+                                    transition={{
+                                      duration: 1.5,
+                                      repeat: Infinity,
+                                      ease: "easeOut",
+                                      delay: 0.4
+                                    }}
+                                  />
+                                  {/* Inner Glow */}
+                                  <motion.div
+                                    className="absolute inset-2 rounded-lg bg-cyan-400/20"
+                                    animate={{
+                                      opacity: [0.2, 0.4, 0.2],
+                                    }}
+                                    transition={{
+                                      duration: 2,
+                                      repeat: Infinity,
+                                      ease: "easeInOut"
+                                    }}
+                                  />
+                                </>
+                              )}
+                              <span className="relative z-10" style={isSelected ? { textShadow: '0 0 10px rgba(34, 211, 238, 0.8)' } : {}}>{isValidDate && date}</span>
+                            </motion.button>
+                          )
+                        })}
+                      </div>
+                    </div>
+
+                    {/* Time Slots with Enhanced Neon Glow */}
+                    <div className="relative">
+                      <motion.h4
+                        className="text-sm font-bold text-white mb-4 px-2"
+                        style={{
+                          textShadow: '0 0 15px rgba(34, 211, 238, 0.6)',
+                        }}
+                        animate={{
+                          textShadow: [
+                            '0 0 15px rgba(34, 211, 238, 0.6)',
+                            '0 0 25px rgba(34, 211, 238, 0.8)',
+                            '0 0 15px rgba(34, 211, 238, 0.6)',
+                          ],
+                        }}
+                        transition={{
+                          duration: 2,
+                          repeat: Infinity,
+                          ease: "easeInOut"
+                        }}
+                      >
+                        {selectedDate ? `Nov ${selectedDate}, 2025` : 'Select a date'}
+                      </motion.h4>
+
+                      {selectedDate && (
+                        <div className="space-y-3 max-h-80 overflow-y-auto pr-2 custom-scrollbar">
+                          {['9:00 AM', '10:00 AM', '11:00 AM', '1:00 PM', '2:00 PM', '3:00 PM', '4:00 PM'].map((time, index) => (
+                            <motion.button
+                              key={time}
+                              onClick={() => setSelectedTime(time)}
+                              initial={{ opacity: 0, x: 20 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              transition={{ delay: index * 0.05 }}
+                              whileHover={{
+                                scale: 1.03,
+                                boxShadow: selectedTime === time
+                                  ? '0 0 40px rgba(34, 211, 238, 0.9), 0 0 80px rgba(34, 211, 238, 0.6)'
+                                  : '0 0 25px rgba(34, 211, 238, 0.4), 0 0 50px rgba(34, 211, 238, 0.2)'
+                              }}
+                              whileTap={{ scale: 0.97 }}
+                              className={`w-full p-4 rounded-2xl text-left text-sm font-bold transition-all relative overflow-hidden ${
+                                selectedTime === time
+                                  ? 'bg-gradient-to-r from-cyan-400 via-cyan-500 to-cyan-600 text-white border-3 border-cyan-200'
+                                  : 'bg-white/90 text-gray-900 border-2 border-gray-200 hover:border-cyan-400'
+                              }`}
+                              style={selectedTime === time ? {
+                                boxShadow: '0 0 30px rgba(34, 211, 238, 0.8), 0 0 60px rgba(34, 211, 238, 0.5), 0 0 90px rgba(34, 211, 238, 0.3)',
+                              } : {}}
+                            >
+                              {selectedTime === time && (
+                                <>
+                                  {/* Animated Neon Glow Overlay */}
+                                  <motion.div
+                                    className="absolute inset-0 bg-gradient-to-r from-cyan-300/30 to-cyan-500/30"
+                                    animate={{
+                                      opacity: [0.4, 0.7, 0.4],
+                                    }}
+                                    transition={{
+                                      duration: 1.5,
+                                      repeat: Infinity,
+                                      ease: "easeInOut"
+                                    }}
+                                  />
+                                  {/* Scanning Line Effect */}
+                                  <motion.div
+                                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent"
+                                    animate={{
+                                      x: ['-100%', '200%'],
+                                    }}
+                                    transition={{
+                                      duration: 2,
+                                      repeat: Infinity,
+                                      ease: "linear"
+                                    }}
+                                  />
+                                  {/* Expanding Border Effect */}
+                                  <motion.div
+                                    className="absolute inset-0 rounded-2xl border-2 border-cyan-200"
+                                    animate={{
+                                      scale: [1, 1.05, 1],
+                                      opacity: [0.8, 0, 0.8],
+                                    }}
+                                    transition={{
+                                      duration: 1.5,
+                                      repeat: Infinity,
+                                      ease: "easeOut"
+                                    }}
+                                  />
+                                </>
+                              )}
+                              <div className="flex items-center justify-between relative z-10">
+                                <span style={selectedTime === time ? { textShadow: '0 0 8px rgba(255, 255, 255, 0.8)' } : {}}>{time}</span>
+                                {selectedTime === time && (
+                                  <motion.div
+                                    initial={{ scale: 0, rotate: -180 }}
+                                    animate={{ scale: 1, rotate: 0 }}
+                                    transition={{ type: "spring", stiffness: 200 }}
+                                    style={{
+                                      filter: 'drop-shadow(0 0 6px rgba(255, 255, 255, 0.9))',
+                                    }}
+                                  >
+                                    <Check className="w-5 h-5" />
+                                  </motion.div>
+                                )}
+                              </div>
+                            </motion.button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                ) : (
+                  <div className="relative p-8">
+                    <div className="text-center py-8">
+                      <motion.div
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        transition={{ type: "spring", stiffness: 200 }}
+                        className="relative w-20 h-20 rounded-full bg-gradient-to-br from-green-400 to-emerald-500 flex items-center justify-center mx-auto mb-6"
+                        style={{
+                          boxShadow: '0 0 40px rgba(34, 197, 94, 0.6), 0 0 80px rgba(34, 197, 94, 0.3)'
+                        }}
+                      >
+                        <CheckCircle2 className="w-10 h-10 text-white" />
+                        <motion.div
+                          className="absolute inset-0 rounded-full border-2 border-green-300"
+                          animate={{
+                            scale: [1, 1.5],
+                            opacity: [0.8, 0],
+                          }}
+                          transition={{
+                            duration: 1.5,
+                            repeat: Infinity,
+                            ease: "easeOut"
+                          }}
+                        />
+                      </motion.div>
+                      <h3 className="text-3xl font-bold text-white mb-4 bg-gradient-to-r from-cyan-400 to-cyan-200 bg-clip-text text-transparent">
+                        You're All Set!
+                      </h3>
+                      <p className="text-base text-cyan-200/90 mb-8">
+                        Your meeting is confirmed for November {selectedDate}, 2025 at {selectedTime}
+                      </p>
+                      <motion.div
+                        initial={{ y: 20, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        transition={{ delay: 0.3 }}
+                        className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-cyan-400 to-cyan-600 text-white text-sm font-bold shadow-lg shadow-cyan-500/50"
+                      >
+                        <Calendar className="w-5 h-5" />
+                        <span>Added to Calendar</span>
+                      </motion.div>
+                      <p className="mt-6 text-xs text-cyan-300/60">
+                        A confirmation email has been sent to your inbox
+                      </p>
+                    </div>
+                  </div>
+                )}
+
+                {/* Form & Confirm Button with Enhanced Neon */}
+                {!showConfirmation && selectedTime && (
+                  <div className="relative p-6 border-t-2 border-cyan-400/30">
+                    {/* Animated Neon Border Top */}
+                    <motion.div
+                      className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-cyan-400 to-transparent"
+                      animate={{
+                        opacity: [0.5, 1, 0.5],
+                      }}
+                      transition={{
+                        duration: 2,
+                        repeat: Infinity,
+                        ease: "easeInOut"
+                      }}
+                    />
+
+                    <div className="grid grid-cols-2 gap-3 mb-4">
+                      <input
+                        type="text"
+                        placeholder="Your Name"
+                        className="px-4 py-3 rounded-xl border-2 border-cyan-500/40 text-white bg-white/5 backdrop-blur-sm focus:outline-none focus:border-cyan-400 focus:ring-4 focus:ring-cyan-400/30 text-sm placeholder:text-cyan-200/40 transition-all hover:border-cyan-400/60"
+                        style={{
+                          boxShadow: '0 0 15px rgba(34, 211, 238, 0.1)',
+                        }}
+                      />
+                      <input
+                        type="email"
+                        placeholder="Your Email"
+                        className="px-4 py-3 rounded-xl border-2 border-cyan-500/40 text-white bg-white/5 backdrop-blur-sm focus:outline-none focus:border-cyan-400 focus:ring-4 focus:ring-cyan-400/30 text-sm placeholder:text-cyan-200/40 transition-all hover:border-cyan-400/60"
+                        style={{
+                          boxShadow: '0 0 15px rgba(34, 211, 238, 0.1)',
+                        }}
+                      />
+                    </div>
+                    <motion.button
+                      onClick={() => setShowConfirmation(true)}
+                      whileHover={{
+                        scale: 1.02,
+                        boxShadow: '0 0 40px rgba(34, 211, 238, 0.9), 0 0 80px rgba(34, 211, 238, 0.6), 0 0 120px rgba(34, 211, 238, 0.4)'
+                      }}
+                      whileTap={{ scale: 0.98 }}
+                      className="w-full py-5 rounded-xl bg-gradient-to-r from-cyan-400 via-cyan-500 to-cyan-600 text-white font-bold text-base relative overflow-hidden group border-2 border-cyan-300"
+                      style={{
+                        boxShadow: '0 0 25px rgba(34, 211, 238, 0.6), 0 0 50px rgba(34, 211, 238, 0.4)'
+                      }}
+                    >
+                      <motion.div
+                        className="absolute inset-0 bg-gradient-to-r from-cyan-300/40 to-cyan-500/40"
+                        animate={{
+                          x: ['-100%', '100%'],
+                        }}
+                        transition={{
+                          duration: 1.5,
+                          repeat: Infinity,
+                          ease: "linear"
+                        }}
+                      />
+                      {/* Pulsing Glow Background */}
+                      <motion.div
+                        className="absolute inset-0 bg-gradient-to-r from-white/10 to-white/10"
+                        animate={{
+                          opacity: [0.3, 0.6, 0.3],
+                        }}
+                        transition={{
+                          duration: 2,
+                          repeat: Infinity,
+                          ease: "easeInOut"
+                        }}
+                      />
+                      {/* Expanding Border */}
+                      <motion.div
+                        className="absolute inset-0 rounded-xl border-2 border-cyan-200"
+                        animate={{
+                          scale: [1, 1.02, 1],
+                          opacity: [0.8, 0, 0.8],
+                        }}
+                        transition={{
+                          duration: 2,
+                          repeat: Infinity,
+                          ease: "easeOut"
+                        }}
+                      />
+                      <span
+                        className="relative z-10 flex items-center justify-center gap-2"
+                        style={{
+                          textShadow: '0 0 10px rgba(255, 255, 255, 0.8)',
+                        }}
+                      >
+                        Confirm Booking for {selectedTime}
+                        <ArrowRight
+                          className="w-5 h-5 group-hover:translate-x-1 transition-transform"
+                          style={{
+                            filter: 'drop-shadow(0 0 6px rgba(255, 255, 255, 0.9))',
+                          }}
+                        />
+                      </span>
+                    </motion.button>
+                  </div>
+                )}
+              </div>
+            </motion.div>
+
+          </div>
         </div>
       </section>
 
@@ -609,6 +1332,10 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* TRY IT LIVE - Interactive Calendar Demo - MOVED TO HERO SECTION */}
+      {/* This section has been moved to the hero section to create a split layout like Calendly */}
+      {/* The interactive demo now appears on the right side of the hero for immediate engagement */}
 
       {/* PRICING SECTION */}
       <section id="pricing" className="relative py-32 border-t border-white/10">
