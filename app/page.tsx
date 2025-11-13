@@ -27,7 +27,7 @@ export default function Home() {
   const [showConfirmation, setShowConfirmation] = useState(false)
   const [selectedTheme, setSelectedTheme] = useState('futuristic')
 
-  // Theme Configurations
+  // Theme Configurations with Neon Colors
   const themes = {
     classic: {
       name: 'Classic B&W',
@@ -37,7 +37,9 @@ export default function Home() {
       border: 'border-gray-300',
       hover: 'hover:bg-gray-100',
       selected: 'bg-black text-white',
-      icon: '🎯'
+      icon: '🎯',
+      neonColor: { r: 100, g: 100, b: 100 }, // Gray neon
+      isDark: false
     },
     gradient: {
       name: 'Purple Dream',
@@ -47,7 +49,9 @@ export default function Home() {
       border: 'border-purple-200',
       hover: 'hover:bg-purple-50',
       selected: 'bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 text-white',
-      icon: '💜'
+      icon: '💜',
+      neonColor: { r: 168, g: 85, b: 247 }, // Purple neon
+      isDark: false
     },
     ocean: {
       name: 'Ocean Blue',
@@ -57,7 +61,9 @@ export default function Home() {
       border: 'border-blue-200',
       hover: 'hover:bg-blue-50',
       selected: 'bg-gradient-to-br from-cyan-600 via-blue-600 to-indigo-600 text-white',
-      icon: '🌊'
+      icon: '🌊',
+      neonColor: { r: 59, g: 130, b: 246 }, // Blue neon
+      isDark: false
     },
     sunset: {
       name: 'Sunset Glow',
@@ -67,7 +73,9 @@ export default function Home() {
       border: 'border-pink-200',
       hover: 'hover:bg-pink-50',
       selected: 'bg-gradient-to-br from-orange-600 via-pink-600 to-rose-600 text-white',
-      icon: '🌅'
+      icon: '🌅',
+      neonColor: { r: 236, g: 72, b: 153 }, // Pink neon
+      isDark: false
     },
     forest: {
       name: 'Forest Green',
@@ -77,7 +85,9 @@ export default function Home() {
       border: 'border-green-200',
       hover: 'hover:bg-green-50',
       selected: 'bg-gradient-to-br from-emerald-600 via-green-600 to-teal-600 text-white',
-      icon: '🌲'
+      icon: '🌲',
+      neonColor: { r: 16, g: 185, b: 129 }, // Green neon
+      isDark: false
     },
     futuristic: {
       name: 'Space Dark',
@@ -87,7 +97,9 @@ export default function Home() {
       border: 'border-cyan-500/30',
       hover: 'hover:bg-white/10',
       selected: 'bg-gradient-to-r from-cyan-400 to-cyan-600 text-white',
-      icon: '🌌'
+      icon: '🌌',
+      neonColor: { r: 34, g: 211, b: 238 }, // Cyan neon
+      isDark: true
     }
   }
 
@@ -311,14 +323,17 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Interactive Calendar - FUTURISTIC SPACE THEME */}
+              {/* Interactive Calendar - ALL THEMES WITH NEON EFFECTS */}
               <motion.div
-                className="relative rounded-3xl overflow-hidden border-2 border-cyan-400/30"
+                className={`relative rounded-3xl overflow-hidden border-2`}
+                style={{
+                  borderColor: `rgba(${currentTheme.neonColor.r}, ${currentTheme.neonColor.g}, ${currentTheme.neonColor.b}, 0.3)`,
+                }}
                 animate={{
                   boxShadow: [
-                    '0 0 30px rgba(34, 211, 238, 0.3), 0 0 60px rgba(34, 211, 238, 0.2), 0 0 90px rgba(34, 211, 238, 0.1)',
-                    '0 0 50px rgba(34, 211, 238, 0.5), 0 0 100px rgba(34, 211, 238, 0.3), 0 0 150px rgba(34, 211, 238, 0.2)',
-                    '0 0 30px rgba(34, 211, 238, 0.3), 0 0 60px rgba(34, 211, 238, 0.2), 0 0 90px rgba(34, 211, 238, 0.1)',
+                    `0 0 30px rgba(${currentTheme.neonColor.r}, ${currentTheme.neonColor.g}, ${currentTheme.neonColor.b}, 0.3), 0 0 60px rgba(${currentTheme.neonColor.r}, ${currentTheme.neonColor.g}, ${currentTheme.neonColor.b}, 0.2), 0 0 90px rgba(${currentTheme.neonColor.r}, ${currentTheme.neonColor.g}, ${currentTheme.neonColor.b}, 0.1)`,
+                    `0 0 50px rgba(${currentTheme.neonColor.r}, ${currentTheme.neonColor.g}, ${currentTheme.neonColor.b}, 0.5), 0 0 100px rgba(${currentTheme.neonColor.r}, ${currentTheme.neonColor.g}, ${currentTheme.neonColor.b}, 0.3), 0 0 150px rgba(${currentTheme.neonColor.r}, ${currentTheme.neonColor.g}, ${currentTheme.neonColor.b}, 0.2)`,
+                    `0 0 30px rgba(${currentTheme.neonColor.r}, ${currentTheme.neonColor.g}, ${currentTheme.neonColor.b}, 0.3), 0 0 60px rgba(${currentTheme.neonColor.r}, ${currentTheme.neonColor.g}, ${currentTheme.neonColor.b}, 0.2), 0 0 90px rgba(${currentTheme.neonColor.r}, ${currentTheme.neonColor.g}, ${currentTheme.neonColor.b}, 0.1)`,
                   ],
                 }}
                 transition={{
@@ -327,21 +342,25 @@ export default function Home() {
                   ease: "easeInOut"
                 }}
               >
-                {/* Animated Space Background */}
-                <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-blue-950/20 to-slate-950">
-                  {/* Twinkling Stars - Larger and More Visible */}
+                {/* Animated Theme-Aware Background */}
+                <div className={`absolute inset-0 ${currentTheme.bg}`}>
+                  {/* Twinkling Stars/Particles - Adaptive Color */}
                   {[...Array(100)].map((_, i) => {
                     const size = Math.random() > 0.7 ? 2 : 1;
+                    const starColor = currentTheme.isDark ? 'rgba(255, 255, 255, 0.8)' : `rgba(${currentTheme.neonColor.r}, ${currentTheme.neonColor.g}, ${currentTheme.neonColor.b}, 0.3)`;
                     return (
                       <motion.div
                         key={i}
-                        className="absolute bg-white rounded-full"
+                        className="absolute rounded-full"
                         style={{
                           width: `${size}px`,
                           height: `${size}px`,
                           top: `${Math.random() * 100}%`,
                           left: `${Math.random() * 100}%`,
-                          boxShadow: size === 2 ? '0 0 8px rgba(255, 255, 255, 0.8)' : '0 0 4px rgba(255, 255, 255, 0.6)',
+                          background: starColor,
+                          boxShadow: size === 2
+                            ? `0 0 8px rgba(${currentTheme.neonColor.r}, ${currentTheme.neonColor.g}, ${currentTheme.neonColor.b}, 0.8)`
+                            : `0 0 4px rgba(${currentTheme.neonColor.r}, ${currentTheme.neonColor.g}, ${currentTheme.neonColor.b}, 0.6)`,
                         }}
                         animate={{
                           opacity: [0.3, 1, 0.3],
@@ -357,7 +376,7 @@ export default function Home() {
                     );
                   })}
 
-                  {/* Neon Floating Particles - Larger and Brighter */}
+                  {/* Neon Floating Particles - Theme Color */}
                   {[...Array(30)].map((_, i) => (
                     <motion.div
                       key={`particle-${i}`}
@@ -365,8 +384,8 @@ export default function Home() {
                       style={{
                         top: `${Math.random() * 100}%`,
                         left: `${Math.random() * 100}%`,
-                        background: 'radial-gradient(circle, rgba(34, 211, 238, 0.8), rgba(34, 211, 238, 0.2))',
-                        boxShadow: '0 0 15px rgba(34, 211, 238, 0.8), 0 0 30px rgba(34, 211, 238, 0.4)',
+                        background: `radial-gradient(circle, rgba(${currentTheme.neonColor.r}, ${currentTheme.neonColor.g}, ${currentTheme.neonColor.b}, 0.8), rgba(${currentTheme.neonColor.r}, ${currentTheme.neonColor.g}, ${currentTheme.neonColor.b}, 0.2))`,
+                        boxShadow: `0 0 15px rgba(${currentTheme.neonColor.r}, ${currentTheme.neonColor.g}, ${currentTheme.neonColor.b}, 0.8), 0 0 30px rgba(${currentTheme.neonColor.r}, ${currentTheme.neonColor.g}, ${currentTheme.neonColor.b}, 0.4)`,
                       }}
                       animate={{
                         y: [0, -40, 0],
@@ -383,19 +402,42 @@ export default function Home() {
                     />
                   ))}
 
-                  {/* Neon Grid Lines */}
+                  {/* Neon Grid Lines - Theme Color */}
                   <div className="absolute inset-0 opacity-20">
-                    <div className="absolute w-full h-px bg-gradient-to-r from-transparent via-cyan-400 to-transparent top-1/4" />
-                    <div className="absolute w-full h-px bg-gradient-to-r from-transparent via-cyan-400 to-transparent top-2/4" />
-                    <div className="absolute w-full h-px bg-gradient-to-r from-transparent via-cyan-400 to-transparent top-3/4" />
+                    <motion.div
+                      className="absolute w-full h-px top-1/4"
+                      style={{
+                        background: `linear-gradient(to right, transparent, rgba(${currentTheme.neonColor.r}, ${currentTheme.neonColor.g}, ${currentTheme.neonColor.b}, 0.6), transparent)`,
+                      }}
+                    />
+                    <motion.div
+                      className="absolute w-full h-px top-2/4"
+                      style={{
+                        background: `linear-gradient(to right, transparent, rgba(${currentTheme.neonColor.r}, ${currentTheme.neonColor.g}, ${currentTheme.neonColor.b}, 0.6), transparent)`,
+                      }}
+                    />
+                    <motion.div
+                      className="absolute w-full h-px top-3/4"
+                      style={{
+                        background: `linear-gradient(to right, transparent, rgba(${currentTheme.neonColor.r}, ${currentTheme.neonColor.g}, ${currentTheme.neonColor.b}, 0.6), transparent)`,
+                      }}
+                    />
                   </div>
                 </div>
 
-                {/* Header - Dark Glassmorphic with Neon Effects */}
-                <div className="relative p-6 bg-gradient-to-r from-slate-900 to-slate-800 backdrop-blur-xl border-b-2 border-cyan-400/30">
+                {/* Header - Theme-Aware Glassmorphic with Neon Effects */}
+                <div
+                  className={`relative p-6 backdrop-blur-xl border-b-2 ${currentTheme.isDark ? 'bg-gradient-to-r from-slate-900 to-slate-800' : 'bg-white/80'}`}
+                  style={{
+                    borderColor: `rgba(${currentTheme.neonColor.r}, ${currentTheme.neonColor.g}, ${currentTheme.neonColor.b}, 0.3)`,
+                  }}
+                >
                   {/* Animated Neon Border Top */}
                   <motion.div
-                    className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-cyan-400 to-transparent"
+                    className="absolute top-0 left-0 right-0 h-0.5"
+                    style={{
+                      background: `linear-gradient(to right, transparent, rgba(${currentTheme.neonColor.r}, ${currentTheme.neonColor.g}, ${currentTheme.neonColor.b}, 0.8), transparent)`,
+                    }}
                     animate={{
                       opacity: [0.5, 1, 0.5],
                     }}
@@ -408,12 +450,15 @@ export default function Home() {
 
                   <div className="flex items-center gap-4 mb-4">
                     <motion.div
-                      className="relative w-14 h-14 rounded-full bg-gradient-to-br from-cyan-400 to-cyan-600 flex items-center justify-center text-2xl"
+                      className={`relative w-14 h-14 rounded-full flex items-center justify-center text-2xl`}
+                      style={{
+                        background: `linear-gradient(135deg, rgba(${currentTheme.neonColor.r}, ${currentTheme.neonColor.g}, ${currentTheme.neonColor.b}, 0.9), rgba(${currentTheme.neonColor.r}, ${currentTheme.neonColor.g}, ${currentTheme.neonColor.b}, 0.6))`,
+                      }}
                       animate={{
                         boxShadow: [
-                          '0 0 30px rgba(34, 211, 238, 0.8), 0 0 60px rgba(34, 211, 238, 0.5)',
-                          '0 0 50px rgba(34, 211, 238, 1), 0 0 100px rgba(34, 211, 238, 0.7)',
-                          '0 0 30px rgba(34, 211, 238, 0.8), 0 0 60px rgba(34, 211, 238, 0.5)',
+                          `0 0 30px rgba(${currentTheme.neonColor.r}, ${currentTheme.neonColor.g}, ${currentTheme.neonColor.b}, 0.8), 0 0 60px rgba(${currentTheme.neonColor.r}, ${currentTheme.neonColor.g}, ${currentTheme.neonColor.b}, 0.5)`,
+                          `0 0 50px rgba(${currentTheme.neonColor.r}, ${currentTheme.neonColor.g}, ${currentTheme.neonColor.b}, 1), 0 0 100px rgba(${currentTheme.neonColor.r}, ${currentTheme.neonColor.g}, ${currentTheme.neonColor.b}, 0.7)`,
+                          `0 0 30px rgba(${currentTheme.neonColor.r}, ${currentTheme.neonColor.g}, ${currentTheme.neonColor.b}, 0.8), 0 0 60px rgba(${currentTheme.neonColor.r}, ${currentTheme.neonColor.g}, ${currentTheme.neonColor.b}, 0.5)`,
                         ],
                       }}
                       transition={{
@@ -422,9 +467,17 @@ export default function Home() {
                         ease: "easeInOut"
                       }}
                     >
-                      <div className="absolute inset-0 rounded-full border-2 border-cyan-300/70" />
+                      <div
+                        className="absolute inset-0 rounded-full border-2"
+                        style={{
+                          borderColor: `rgba(${currentTheme.neonColor.r}, ${currentTheme.neonColor.g}, ${currentTheme.neonColor.b}, 0.7)`,
+                        }}
+                      />
                       <motion.div
-                        className="absolute inset-0 rounded-full border-2 border-cyan-200"
+                        className="absolute inset-0 rounded-full border-2"
+                        style={{
+                          borderColor: `rgba(${currentTheme.neonColor.r}, ${currentTheme.neonColor.g}, ${currentTheme.neonColor.b}, 0.9)`,
+                        }}
                         animate={{
                           scale: [1, 1.3, 1],
                           opacity: [0.8, 0, 0.8],
@@ -436,7 +489,10 @@ export default function Home() {
                         }}
                       />
                       <motion.div
-                        className="absolute inset-0 rounded-full border-2 border-cyan-100"
+                        className="absolute inset-0 rounded-full border-2"
+                        style={{
+                          borderColor: `rgba(${currentTheme.neonColor.r}, ${currentTheme.neonColor.g}, ${currentTheme.neonColor.b}, 0.6)`,
+                        }}
                         animate={{
                           scale: [1, 1.5, 1],
                           opacity: [0.6, 0, 0.6],
@@ -452,37 +508,62 @@ export default function Home() {
                     </motion.div>
                     <div>
                       <motion.h3
-                        className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-cyan-200 bg-clip-text text-transparent"
+                        className={`text-2xl font-bold ${currentTheme.text}`}
                         style={{
-                          textShadow: '0 0 20px rgba(34, 211, 238, 0.5)',
+                          textShadow: `0 0 20px rgba(${currentTheme.neonColor.r}, ${currentTheme.neonColor.g}, ${currentTheme.neonColor.b}, 0.5)`,
                         }}
                       >
                         30-Minute Demo Call
                       </motion.h3>
-                      <p className="text-cyan-300/90 text-sm font-medium" style={{ textShadow: '0 0 10px rgba(34, 211, 238, 0.3)' }}>with Sarah Chen</p>
+                      <p
+                        className={`text-sm font-medium ${currentTheme.isDark ? 'text-white/90' : currentTheme.text}`}
+                        style={{
+                          textShadow: `0 0 10px rgba(${currentTheme.neonColor.r}, ${currentTheme.neonColor.g}, ${currentTheme.neonColor.b}, 0.3)`,
+                        }}
+                      >
+                        with Sarah Chen
+                      </p>
                     </div>
                   </div>
-                  <div className="flex items-center gap-4 text-cyan-200/90 text-sm">
+                  <div className={`flex items-center gap-4 text-sm ${currentTheme.isDark ? 'text-white/90' : currentTheme.text}`}>
                     <motion.div
-                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/5 backdrop-blur-sm border-2 border-cyan-500/40"
+                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/5 backdrop-blur-sm border-2"
+                      style={{
+                        borderColor: `rgba(${currentTheme.neonColor.r}, ${currentTheme.neonColor.g}, ${currentTheme.neonColor.b}, 0.4)`,
+                      }}
                       whileHover={{
                         scale: 1.05,
-                        boxShadow: '0 0 25px rgba(34, 211, 238, 0.6), 0 0 50px rgba(34, 211, 238, 0.3)',
-                        borderColor: 'rgba(34, 211, 238, 0.8)'
+                        boxShadow: `0 0 25px rgba(${currentTheme.neonColor.r}, ${currentTheme.neonColor.g}, ${currentTheme.neonColor.b}, 0.6), 0 0 50px rgba(${currentTheme.neonColor.r}, ${currentTheme.neonColor.g}, ${currentTheme.neonColor.b}, 0.3)`,
+                        borderColor: `rgba(${currentTheme.neonColor.r}, ${currentTheme.neonColor.g}, ${currentTheme.neonColor.b}, 0.8)`
                       }}
                     >
-                      <Clock className="w-4 h-4 text-cyan-400" style={{ filter: 'drop-shadow(0 0 4px rgba(34, 211, 238, 0.8))' }} />
+                      <Clock
+                        className="w-4 h-4"
+                        style={{
+                          color: `rgb(${currentTheme.neonColor.r}, ${currentTheme.neonColor.g}, ${currentTheme.neonColor.b})`,
+                          filter: `drop-shadow(0 0 4px rgba(${currentTheme.neonColor.r}, ${currentTheme.neonColor.g}, ${currentTheme.neonColor.b}, 0.8))`,
+                        }}
+                      />
                       <span className="font-medium">30 min</span>
                     </motion.div>
                     <motion.div
-                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/5 backdrop-blur-sm border-2 border-cyan-500/40"
+                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/5 backdrop-blur-sm border-2"
+                      style={{
+                        borderColor: `rgba(${currentTheme.neonColor.r}, ${currentTheme.neonColor.g}, ${currentTheme.neonColor.b}, 0.4)`,
+                      }}
                       whileHover={{
                         scale: 1.05,
-                        boxShadow: '0 0 25px rgba(34, 211, 238, 0.6), 0 0 50px rgba(34, 211, 238, 0.3)',
-                        borderColor: 'rgba(34, 211, 238, 0.8)'
+                        boxShadow: `0 0 25px rgba(${currentTheme.neonColor.r}, ${currentTheme.neonColor.g}, ${currentTheme.neonColor.b}, 0.6), 0 0 50px rgba(${currentTheme.neonColor.r}, ${currentTheme.neonColor.g}, ${currentTheme.neonColor.b}, 0.3)`,
+                        borderColor: `rgba(${currentTheme.neonColor.r}, ${currentTheme.neonColor.g}, ${currentTheme.neonColor.b}, 0.8)`
                       }}
                     >
-                      <Calendar className="w-4 h-4 text-cyan-400" style={{ filter: 'drop-shadow(0 0 4px rgba(34, 211, 238, 0.8))' }} />
+                      <Calendar
+                        className="w-4 h-4"
+                        style={{
+                          color: `rgb(${currentTheme.neonColor.r}, ${currentTheme.neonColor.g}, ${currentTheme.neonColor.b})`,
+                          filter: `drop-shadow(0 0 4px rgba(${currentTheme.neonColor.r}, ${currentTheme.neonColor.g}, ${currentTheme.neonColor.b}, 0.8))`,
+                        }}
+                      />
                       <span className="font-medium">Video Call</span>
                     </motion.div>
                   </div>
@@ -880,7 +961,6 @@ export default function Home() {
                     </motion.button>
                   </div>
                 )}
-              </div>
             </motion.div>
 
           </div>
