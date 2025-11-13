@@ -39,7 +39,8 @@ export default function Home() {
       selected: 'bg-black text-white',
       icon: '🎯',
       neonColor: { r: 100, g: 100, b: 100 },
-      isDark: false
+      isDark: false,
+      noAnimations: false
     },
     gradient: {
       name: 'Purple Dream',
@@ -51,7 +52,8 @@ export default function Home() {
       selected: 'bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 text-white',
       icon: '💜',
       neonColor: { r: 168, g: 85, b: 247 },
-      isDark: false
+      isDark: false,
+      noAnimations: false
     },
     ocean: {
       name: 'Ocean Blue',
@@ -63,7 +65,8 @@ export default function Home() {
       selected: 'bg-gradient-to-br from-cyan-600 via-blue-600 to-indigo-600 text-white',
       icon: '🌊',
       neonColor: { r: 59, g: 130, b: 246 },
-      isDark: false
+      isDark: false,
+      noAnimations: false
     },
     sunset: {
       name: 'Sunset Glow',
@@ -75,7 +78,8 @@ export default function Home() {
       selected: 'bg-gradient-to-br from-orange-600 via-pink-600 to-rose-600 text-white',
       icon: '🌅',
       neonColor: { r: 236, g: 72, b: 153 },
-      isDark: false
+      isDark: false,
+      noAnimations: false
     },
     forest: {
       name: 'Forest Green',
@@ -87,7 +91,8 @@ export default function Home() {
       selected: 'bg-gradient-to-br from-emerald-600 via-green-600 to-teal-600 text-white',
       icon: '🌲',
       neonColor: { r: 16, g: 185, b: 129 },
-      isDark: false
+      isDark: false,
+      noAnimations: false
     },
     futuristic: {
       name: 'Space Dark',
@@ -99,7 +104,8 @@ export default function Home() {
       selected: 'bg-gradient-to-r from-cyan-400 to-cyan-600 text-white',
       icon: '🌌',
       neonColor: { r: 34, g: 211, b: 238 },
-      isDark: true
+      isDark: true,
+      noAnimations: false
     },
     minimal: {
       name: 'Minimalistic',
@@ -124,7 +130,8 @@ export default function Home() {
       selected: 'bg-gradient-to-r from-orange-500 to-amber-500 text-white',
       icon: '🪸',
       neonColor: { r: 249, g: 115, b: 22 },
-      isDark: false
+      isDark: false,
+      noAnimations: false
     },
     midnight: {
       name: 'Midnight Blue',
@@ -136,7 +143,8 @@ export default function Home() {
       selected: 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white',
       icon: '🌙',
       neonColor: { r: 59, g: 130, b: 246 },
-      isDark: true
+      isDark: true,
+      noAnimations: false
     },
     rose: {
       name: 'Rose Gold',
@@ -148,7 +156,8 @@ export default function Home() {
       selected: 'bg-gradient-to-r from-rose-500 to-amber-400 text-white',
       icon: '🌹',
       neonColor: { r: 244, g: 114, b: 182 },
-      isDark: false
+      isDark: false,
+      noAnimations: false
     }
   }
 
