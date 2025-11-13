@@ -100,6 +100,55 @@ export default function Home() {
       icon: '🌌',
       neonColor: { r: 34, g: 211, b: 238 },
       isDark: true
+    },
+    minimal: {
+      name: 'Minimalistic',
+      bg: 'bg-white',
+      primary: 'from-gray-900 to-gray-700',
+      text: 'text-gray-900',
+      border: 'border-gray-200',
+      hover: 'hover:bg-gray-50',
+      selected: 'bg-gray-900 text-white',
+      icon: '⚡',
+      neonColor: { r: 75, g: 85, b: 99 },
+      isDark: false,
+      noAnimations: true
+    },
+    coral: {
+      name: 'Coral Reef',
+      bg: 'bg-gradient-to-br from-orange-50 via-coral-50 to-amber-50',
+      primary: 'from-orange-500 via-coral-500 to-amber-500',
+      text: 'text-gray-900',
+      border: 'border-orange-200',
+      hover: 'hover:bg-orange-50',
+      selected: 'bg-gradient-to-r from-orange-500 to-amber-500 text-white',
+      icon: '🪸',
+      neonColor: { r: 249, g: 115, b: 22 },
+      isDark: false
+    },
+    midnight: {
+      name: 'Midnight Blue',
+      bg: 'bg-gradient-to-br from-blue-950 via-indigo-950 to-slate-950',
+      primary: 'from-blue-900 to-indigo-900',
+      text: 'text-white',
+      border: 'border-blue-500/30',
+      hover: 'hover:bg-blue-900/20',
+      selected: 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white',
+      icon: '🌙',
+      neonColor: { r: 59, g: 130, b: 246 },
+      isDark: true
+    },
+    rose: {
+      name: 'Rose Gold',
+      bg: 'bg-gradient-to-br from-rose-50 via-pink-50 to-amber-50',
+      primary: 'from-rose-500 via-pink-500 to-amber-400',
+      text: 'text-gray-900',
+      border: 'border-rose-200',
+      hover: 'hover:bg-rose-50',
+      selected: 'bg-gradient-to-r from-rose-500 to-amber-400 text-white',
+      icon: '🌹',
+      neonColor: { r: 244, g: 114, b: 182 },
+      isDark: false
     }
   }
 
@@ -147,10 +196,10 @@ export default function Home() {
         />
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
+          <div className="flex flex-col gap-12 items-center">
 
-            {/* LEFT SIDE - Content */}
-            <div className="text-left">
+            {/* TOP - Content */}
+            <div className="text-center max-w-4xl">
               {/* Badge */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -229,12 +278,12 @@ export default function Home() {
               </motion.div>
             </div>
 
-            {/* RIGHT SIDE - Interactive Demo */}
+            {/* BOTTOM - Interactive Demo */}
             <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="relative"
+              className="relative w-full max-w-4xl"
             >
               {/* Floating Sparkles */}
               {[...Array(8)].map((_, i) => (
@@ -323,13 +372,13 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Interactive Calendar - FUTURISTIC SPACE THEME */}
+              {/* Interactive Calendar */}
               <motion.div
                 className="relative rounded-3xl overflow-hidden border-2"
                 style={{
                   borderColor: `rgba(${currentTheme.neonColor.r}, ${currentTheme.neonColor.g}, ${currentTheme.neonColor.b}, 0.3)`,
                 }}
-                animate={{
+                animate={currentTheme.noAnimations ? {} : {
                   boxShadow: [
                     `0 0 30px rgba(${currentTheme.neonColor.r}, ${currentTheme.neonColor.g}, ${currentTheme.neonColor.b}, 0.3), 0 0 60px rgba(${currentTheme.neonColor.r}, ${currentTheme.neonColor.g}, ${currentTheme.neonColor.b}, 0.2), 0 0 90px rgba(${currentTheme.neonColor.r}, ${currentTheme.neonColor.g}, ${currentTheme.neonColor.b}, 0.1)`,
                     `0 0 50px rgba(${currentTheme.neonColor.r}, ${currentTheme.neonColor.g}, ${currentTheme.neonColor.b}, 0.5), 0 0 100px rgba(${currentTheme.neonColor.r}, ${currentTheme.neonColor.g}, ${currentTheme.neonColor.b}, 0.3), 0 0 150px rgba(${currentTheme.neonColor.r}, ${currentTheme.neonColor.g}, ${currentTheme.neonColor.b}, 0.2)`,
@@ -343,9 +392,10 @@ export default function Home() {
                 }}
               >
                 {/* Animated Space Background */}
+                {!currentTheme.noAnimations && (
                 <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-blue-950/20 to-slate-950">
-                  {/* Twinkling Stars - Larger and More Visible */}
-                  {[...Array(100)].map((_, i) => {
+                  {/* Twinkling Stars - Reduced from 100 to 50 for performance */}
+                  {[...Array(50)].map((_, i) => {
                     const size = Math.random() > 0.7 ? 2 : 1;
                     return (
                       <motion.div
@@ -372,8 +422,8 @@ export default function Home() {
                     );
                   })}
 
-                  {/* Neon Floating Particles - Larger and Brighter */}
-                  {[...Array(30)].map((_, i) => (
+                  {/* Neon Floating Particles - Reduced from 30 to 15 for performance */}
+                  {[...Array(15)].map((_, i) => (
                     <motion.div
                       key={`particle-${i}`}
                       className="absolute w-3 h-3 rounded-full"
@@ -405,6 +455,7 @@ export default function Home() {
                     <div className="absolute w-full h-px top-3/4" style={{ background: `linear-gradient(to right, transparent, rgba(${currentTheme.neonColor.r}, ${currentTheme.neonColor.g}, ${currentTheme.neonColor.b}, 1), transparent)` }} />
                   </div>
                 </div>
+                )}
 
                 {/* Header - Dark Glassmorphic with Neon Effects */}
                 <div className="relative p-6 bg-gradient-to-r from-slate-900 to-slate-800 backdrop-blur-xl border-b-2" style={{ borderColor: `rgba(${currentTheme.neonColor.r}, ${currentTheme.neonColor.g}, ${currentTheme.neonColor.b}, 0.3)` }}>
