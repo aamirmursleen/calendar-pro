@@ -1,36 +1,130 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# CalendarPro - Premium Scheduling Platform
 
-## Getting Started
+**100x Better than Calendly** - A next-generation scheduling platform built with Next.js 14, Supabase, and modern web technologies.
 
-First, run the development server:
+## ✨ Key Features
+
+### 🎨 Landing Page (12 Premium Sections)
+- Hero with animated gradient background
+- Problem/Solution sections with cost calculations
+- Features showcase (12 features with hover effects)
+- Pricing (Free, Pro $29, Agency $79)
+- Social proof, testimonials, FAQ, and more
+
+### 🔐 Authentication System
+- Email/Password signup and signin
+- Google OAuth ready
+- Protected routes with middleware
+- Session management
+
+### 📊 Dashboard
+- Stats overview (bookings, revenue, event types)
+- Quick actions and recent bookings
+- Beautiful sidebar navigation
+
+### 📅 Premium Booking Interface (10x Better!)
+- Smooth calendar animations
+- Beautiful time slot selection
+- Custom booking forms
+- Timezone support
+- Success confirmation page
+
+### 🎯 Event Types Management
+- Unlimited event types
+- Custom durations, buffer times
+- Paid bookings (Stripe/PayPal ready)
+- Custom branding and forms
+
+### ⚙️ Super Admin Panel
+- Email server (SMTP) configuration
+- Twilio SMS setup
+- Stripe & PayPal configuration
+- User management
+- System analytics
+
+## 🚀 Quick Start
 
 ```bash
+# Install dependencies
+npm install
+
+# Set up environment variables
+cp .env.example .env.local
+# Edit .env.local with your Supabase credentials
+
+# Run database migration
+# Go to Supabase SQL Editor and run supabase-schema.sql
+
+# Start development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Visit http://localhost:3000
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 📦 Tech Stack
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Next.js 14 (App Router)
+- TypeScript
+- Tailwind CSS + Framer Motion
+- shadcn/ui
+- Supabase (Auth + Database)
+- Ready for: Stripe, PayPal, Twilio, Google Calendar
 
-## Learn More
+## 🗄️ Database Setup
 
-To learn more about Next.js, take a look at the following resources:
+1. Create Supabase project at [supabase.com](https://supabase.com)
+2. Run `supabase-schema.sql` in SQL Editor
+3. Add credentials to `.env.local`
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🎯 What's Built
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+✅ Landing page (12 sections)
+✅ Authentication (signup/signin)
+✅ Dashboard with stats
+✅ Premium booking interface
+✅ Event types management
+✅ Super admin panel
+✅ Database schema
+🔜 Google Calendar integration
+🔜 Payment processing
+🔜 SMS reminders
 
-## Deploy on Vercel
+## 📝 Environment Variables
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Create `.env.local`:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```env
+NEXT_PUBLIC_SUPABASE_URL=your_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_key
+SUPABASE_SERVICE_ROLE_KEY=your_service_key
+```
+
+See `.env.local` for all options.
+
+## 🚀 Deployment
+
+Deploy to Vercel:
+
+```bash
+vercel
+```
+
+Set environment variables in Vercel dashboard.
+
+## 📖 Documentation
+
+- `PROGRESS.md` - Development progress and session notes
+- `supabase-schema.sql` - Complete database schema
+- Check code comments for implementation details
+
+## 🤝 Contributing
+
+Contributions welcome! Please submit a Pull Request.
+
+## 📄 License
+
+MIT License
+
+---
+
+**Built with ❤️ for modern scheduling needs**
